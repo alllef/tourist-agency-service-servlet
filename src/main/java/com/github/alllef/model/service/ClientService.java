@@ -12,7 +12,10 @@ import com.github.alllef.utils.enums.TourType;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.BinaryOperator;
+import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -38,7 +41,21 @@ public class ClientService {
         return Optional.ofNullable(userDAO.findUserByEmail(email));
     }
 
-    public List<Tour> filterByType(TourType tourType) {
+    public List<Tour> filterTours(Map<String, String[]> parameters) {
+        boolean byPrice = parameters.containsKey("min-price") && parameters.containsKey("max-price");
+        ToIntFunction<String> toInt = (str) ->Integer.parseInt(parameters.get(str)[0]);
+
+        if (byPrice) {
+            return filterByPrice(toInt.applyAsInt("min-price"), toInt.applyAsInt("max-price"));
+        } else
+            return findAllTours();
+    }
+
+    private List<Tour> findAllTours() {
+        return tourDAO.findAll();
+    }
+
+    private List<Tour> filterByType(TourType tourType) {
         return tourDAO.findAll()
                 .stream()
                 .filter(tour -> tour.getTourType().equals(tourType))
@@ -46,7 +63,7 @@ public class ClientService {
                 .collect(Collectors.toList());
     }
 
-    public List<Tour> filterByPrice(int minPrice, int maxPrice) {
+    private List<Tour> filterByPrice(int minPrice, int maxPrice) {
         return tourDAO.findAll()
                 .stream()
                 .filter(tour -> tour.getPrice() >= minPrice && tour.getPrice() <= maxPrice)
@@ -54,7 +71,7 @@ public class ClientService {
                 .collect(Collectors.toList());
     }
 
-    public List<Tour> filterByPeopleNumber(int minPeopleNumber, int maxPeopleNumber) {
+    private List<Tour> filterByPeopleNumber(int minPeopleNumber, int maxPeopleNumber) {
         return tourDAO.findAll()
                 .stream()
                 .filter(tour -> tour.getPeopleNumber() >= minPeopleNumber && tour.getPeopleNumber() <= maxPeopleNumber)
@@ -62,7 +79,7 @@ public class ClientService {
                 .collect(Collectors.toList());
     }
 
-    public List<Tour> filterByHotelType(HotelType hotelType) {
+    private List<Tour> filterByHotelType(HotelType hotelType) {
         return tourDAO.findAll()
                 .stream()
                 .filter(tour -> tour.getHotelType().equals(hotelType))

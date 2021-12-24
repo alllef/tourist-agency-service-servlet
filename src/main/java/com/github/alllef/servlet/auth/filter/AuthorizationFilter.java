@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
 
-@WebFilter(filterName = "authorization", urlPatterns = "/*")
+//@WebFilter(filterName = "authorization", urlPatterns = "/*")
 public class AuthorizationFilter implements DefaultFilter {
 
     @Override
