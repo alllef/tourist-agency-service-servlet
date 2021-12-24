@@ -42,6 +42,7 @@ public class UserDAO extends AbstractDAO<User> {
         try (PreparedStatement pstmt = con.prepareStatement(findByEmailSQL)) {
             pstmt.setString(1, email);
             ResultSet resultSet = pstmt.executeQuery();
+            while (resultSet.next())
             return mapToEntity(resultSet);
 
         } catch (SQLException throwables) {
@@ -85,7 +86,7 @@ public class UserDAO extends AbstractDAO<User> {
                 .firstName(resultSet.getString("first_name"))
                 .lastName(resultSet.getString("last_name"))
                 .userType(UserType.valueOf(resultSet.getString("user_type")))
-                .password(resultSet.getString(resultSet.getString("password")))
+                .password(resultSet.getString("user_password"))
                 .build();
     }
 }

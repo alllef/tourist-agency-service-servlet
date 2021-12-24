@@ -11,12 +11,19 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebFilter(filterName = "authentication", urlPatterns = "/*")
-public class AuthenticationFilter implements DefaultFilter{
+public class AuthenticationFilter implements DefaultFilter {
     @Override
     public void doHttpFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute("user");
-        if (SecurityUtils.hasPermission(user.getUserType(),(request.getServletPath())))
-            filterChain.doFilter(request,response);
+        String loginURI = request.getContextPath() + "/login";
+        if (request.getServletPath().equals("/login"))
+            filterChain.doFilter(request, response);
+        else {
+            HttpSession session = request.getSession(false);
+            User user = (User) session.getAttribute("user");
+            System.out.println(user + "User");
+            if (SecurityUtils.hasPermission(user.getUserType(), (request.getServletPath())))
+                filterChain.doFilter(request, response);
+            else response.sendRedirect(loginURI);
+        }
     }
 }
