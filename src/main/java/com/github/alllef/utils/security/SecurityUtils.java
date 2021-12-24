@@ -12,7 +12,7 @@ public class SecurityUtils {
     static {
         rolesWithServlets.put(UserType.MANAGER, List.of("/manager"));
         rolesWithServlets.put(UserType.ADMINISTRATOR, List.of("/manager","/administrator","/logged"));
-        rolesWithServlets.put(UserType.CLIENT, List.of("/client"));
+        rolesWithServlets.put(UserType.CLIENT, List.of("/client","/tours/catalogue","/logged"));
     }
 
     public static boolean hasPermission(UserType userType, String servletPath){
