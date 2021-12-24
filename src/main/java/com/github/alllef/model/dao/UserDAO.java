@@ -54,7 +54,7 @@ public class UserDAO extends AbstractDAO<User> {
     @Override
     public void create(User entity) {
         String insertSQL = String.format("""
-                insert into %s(user_type,first_name,last_name,email,password)
+                insert into %s(user_type,first_name,last_name,email,user_password)
                   values(?,?,?,?,?)""", tableName);
         try (PreparedStatement pstmt = con.prepareStatement(insertSQL)) {
             pstmt.setString(1, entity.getUserType().toString());

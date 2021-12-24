@@ -15,7 +15,7 @@ public class AuthenticationFilter implements DefaultFilter {
     @Override
     public void doHttpFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String loginURI = request.getContextPath() + "/login";
-        if (request.getServletPath().equals("/login"))
+        if (request.getServletPath().equals("/login") || request.getServletPath().contains("/register"))
             filterChain.doFilter(request, response);
         else {
             HttpSession session = request.getSession(false);
