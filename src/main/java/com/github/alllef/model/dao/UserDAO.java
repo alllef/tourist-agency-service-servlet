@@ -1,5 +1,6 @@
 package com.github.alllef.model.dao;
 
+import com.github.alllef.model.ConnectionSingleton;
 import com.github.alllef.model.entity.User;
 import com.github.alllef.utils.enums.UserType;
 
@@ -7,10 +8,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Optional;
 
 public class UserDAO extends AbstractDAO<User> {
-    public UserDAO(Connection connection) {
+    private static UserDAO userDAO = null;
+
+    protected static UserDAO getInstance() {
+        if (userDAO == null)
+            userDAO = new UserDAO(ConnectionSingleton.getConnection());
+
+        return userDAO;
+    }
+
+    private UserDAO(Connection connection) {
         super("users", connection);
     }
 

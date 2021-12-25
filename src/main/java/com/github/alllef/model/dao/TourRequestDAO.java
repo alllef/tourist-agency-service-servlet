@@ -1,5 +1,6 @@
 package com.github.alllef.model.dao;
 
+import com.github.alllef.model.ConnectionSingleton;
 import com.github.alllef.model.entity.Tour;
 import com.github.alllef.model.entity.TourRequest;
 import com.github.alllef.utils.enums.HotelType;
@@ -15,7 +16,16 @@ import java.util.List;
 import java.util.Map;
 
 public class TourRequestDAO extends AbstractDAO<TourRequest> {
-    public TourRequestDAO(Connection connection) {
+    private static TourRequestDAO tourDAO = null;
+
+    protected static TourRequestDAO getInstance() {
+        if (tourDAO == null)
+            tourDAO = new TourRequestDAO(ConnectionSingleton.getConnection());
+
+        return tourDAO;
+    }
+
+    private TourRequestDAO(Connection connection) {
         super("tour_requests", connection);
     }
 

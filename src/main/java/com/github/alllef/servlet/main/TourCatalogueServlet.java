@@ -1,6 +1,7 @@
 package com.github.alllef.servlet.main;
 
 import com.github.alllef.model.ConnectionSingleton;
+import com.github.alllef.model.dao.DaoFactory;
 import com.github.alllef.model.dao.TourDAO;
 import com.github.alllef.model.dao.TourRequestDAO;
 import com.github.alllef.model.dao.UserDAO;
@@ -42,13 +43,16 @@ public class TourCatalogueServlet extends HttpServlet {
         long tourId = Long.parseLong(req.getParameter("order"));
         HttpSession session = req.getSession(false);
         User user = (User) session.getAttribute("user");
-        ClientService client = new ClientService(new TourDAO(ConnectionSingleton.getConnection()), new TourRequestDAO(ConnectionSingleton.getConnection()), new UserDAO(ConnectionSingleton.getConnection()));
+        DaoFactory daoFactory = DaoFactory.getInstance();
+        ClientService client = new ClientService(daoFactory.getTourDAO(), daoFactory.getTourRequestDAO(), daoFactory.getUserDAO());
+
         client.orderTour(tourId, user.getUserId());
         htmlWithTours(resp.getWriter(), req.getParameterMap());
     }
 
     public void htmlWithTours(PrintWriter writer, Map<String, String[]> params) {
-        ClientService client = new ClientService(new TourDAO(ConnectionSingleton.getConnection()), new TourRequestDAO(ConnectionSingleton.getConnection()), new UserDAO(ConnectionSingleton.getConnection()));
+        DaoFactory daoFactory = DaoFactory.getInstance();
+        ClientService client = new ClientService(daoFactory.getTourDAO(), daoFactory.getTourRequestDAO(), daoFactory.getUserDAO());
         StringBuilder resultsPeople = new StringBuilder();
         for (Tour tour : client.filterTours(params))
             resultsPeople.append(String.format(catalogueTemplate, tour.getTourType(), tour.getPrice(), tour.getHotelType(), tour.getPeopleNumber(), tour.getTourId()));

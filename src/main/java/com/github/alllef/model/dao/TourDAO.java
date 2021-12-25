@@ -1,5 +1,6 @@
 package com.github.alllef.model.dao;
 
+import com.github.alllef.model.ConnectionSingleton;
 import com.github.alllef.model.entity.Tour;
 import com.github.alllef.utils.enums.HotelType;
 import com.github.alllef.utils.enums.TourType;
@@ -10,7 +11,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class TourDAO extends AbstractDAO<Tour> {
-    public TourDAO(Connection connection) {
+    private static TourDAO tourDAO = null;
+
+    protected static TourDAO getInstance() {
+        if (tourDAO == null)
+            tourDAO = new TourDAO(ConnectionSingleton.getConnection());
+
+        return tourDAO;
+    }
+
+    private TourDAO(Connection connection) {
         super("tours", connection);
     }
 
@@ -32,7 +42,7 @@ public class TourDAO extends AbstractDAO<Tour> {
             pstmt.setString(3, entity.getHotelType().toString());
             pstmt.setInt(4, entity.getPrice());
             pstmt.setBoolean(5, entity.isBurning());
-            pstmt.setLong(6,entity.getTourId());
+            pstmt.setLong(6, entity.getTourId());
             pstmt.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -50,7 +60,8 @@ public class TourDAO extends AbstractDAO<Tour> {
             pstmt.setString(2, entity.getTourType().toString());
             pstmt.setString(3, entity.getHotelType().toString());
             pstmt.setInt(4, entity.getPrice());
-            pstmt.setBoolean(5, entity.isBurning());;
+            pstmt.setBoolean(5, entity.isBurning());
+            ;
             pstmt.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -62,7 +73,7 @@ public class TourDAO extends AbstractDAO<Tour> {
     public void delete(Long id) {
         String deleteQuery = String.format("DELETE FROM %s where tour_id=?", tableName);
         try (PreparedStatement pstmt = con.prepareStatement(deleteQuery)) {
-            pstmt.setLong(1,id);
+            pstmt.setLong(1, id);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

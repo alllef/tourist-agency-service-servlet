@@ -19,11 +19,8 @@ public class ManagerService {
         tourDAO.update(burningTour);
     }
 
-    public void changeTourType(Tour tour, TourType tourType){
-        Tour tourWithChangedType = tour.toBuilder()
-                .tourType(tourType)
-                .build();
-        tourDAO.update(tourWithChangedType);
+    public void updateTour(Tour tour) {
+        tourDAO.update(tour);
     }
 
     public void setTourRequestDiscount(TourRequest tourRequest, int discount) {
@@ -33,14 +30,5 @@ public class ManagerService {
 
         tourRequestDAO.update(tourRequestDiscount);
     }
-
-    public void setTourMaxDiscount(Tour tour,int maxDiscount){
-        Tour tourWithDiscount = tour.toBuilder()
-                .maxDiscount(maxDiscount)
-                .build();
-
-        tourDAO.update(tourWithDiscount);
-    }
-
 
 }
