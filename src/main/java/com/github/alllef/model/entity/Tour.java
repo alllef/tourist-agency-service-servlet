@@ -4,6 +4,9 @@ import com.github.alllef.utils.enums.HotelType;
 import com.github.alllef.utils.enums.TourType;
 import lombok.*;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 @Data
 @AllArgsConstructor
 @Builder(toBuilder = true)

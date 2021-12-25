@@ -18,41 +18,6 @@ import java.util.Map;
 
 @WebServlet(urlPatterns = "/tours/catalogue")
 public class TourCatalogueServlet extends HttpServlet {
-    private static final String staticTemplate ="%s"; /*"""
-            <html>
-            <head>
-                <title>Title</title>
-            </head>
-            <body>
-            <h1>Tour catalogue</h1><br>
-            %s
-            <form id="catalogue-filter" action="catalogue" method="post">
-                <h3>Tour type</h3>
-                <select form="catalogue-filter" name="tour-type" id="tour-type">
-                    <option value="REST">Rest</option>
-                    <option value="EXCURSION">Excursion</option>
-                    <option value="SHOPPING">Shopping</option>
-                </select>
-               
-                <h3>Min price</h3>
-                <input id="min-price" name="min-price" type="number"/>
-                <h3>Max price</h3>
-                <input id="max-price" name="max-price" type="number"/>
-                <h3>Min people number</h3>
-                <input id="min-people-number" name="min-people-number" type="number"/>
-                <h3>Max people number</h3>
-                <input id="max-people-number" name="max-people-number" type="number"/>
-                <h3>Hotel type</h3>
-                <select form="catalogue-filter" name="hotel-type" id="hotel-type">
-                    <option value="HOSTEL">Hostel</option>
-                    <option value="ALL_INCLUSIVE">All inclusive</option>
-                </select>
-                <button type="submit" name="" value="Filter" title="Filter">Filter</button>
-            </form>
-                      
-            </body>
-            </html>"""*/;
-
     private static final String catalogueTemplate = """
             <b>Type:</b> %s<br>
             <b>Price:</b> %d<br>
@@ -68,7 +33,7 @@ public class TourCatalogueServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html");
-         htmlWithTours(resp.getWriter(), req.getParameterMap());
+        htmlWithTours(resp.getWriter(), req.getParameterMap());
     }
 
     public void htmlWithTours(PrintWriter writer, Map<String, String[]> params) {
@@ -77,10 +42,7 @@ public class TourCatalogueServlet extends HttpServlet {
         for (Tour tour : client.filterTours(params))
             resultsPeople.append(String.format(catalogueTemplate, tour.getTourType(), tour.getPrice(), tour.getHotelType(), tour.getPeopleNumber()));
 
-
-            String resultString = String.format(staticTemplate, resultsPeople);
-            writer.println(resultString);
+        writer.println(resultsPeople);
 
     }
-
 }

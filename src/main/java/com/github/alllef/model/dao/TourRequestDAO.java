@@ -1,12 +1,18 @@
 package com.github.alllef.model.dao;
 
+import com.github.alllef.model.entity.Tour;
 import com.github.alllef.model.entity.TourRequest;
+import com.github.alllef.utils.enums.HotelType;
 import com.github.alllef.utils.enums.RequestStatus;
+import com.github.alllef.utils.enums.TourType;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TourRequestDAO extends AbstractDAO<TourRequest> {
     public TourRequestDAO(Connection connection) {
@@ -54,10 +60,43 @@ public class TourRequestDAO extends AbstractDAO<TourRequest> {
     public void delete(Long id) {
         String deleteQuery = String.format("DELETE FROM %s where tour_request_id=?", tableName);
         try (PreparedStatement pstmt = con.prepareStatement(deleteQuery)) {
-            pstmt.setLong(1,id);
+            pstmt.setLong(1, id);
+            pstmt.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+    }
+
+
+    public Map<TourRequest, Tour> findTourRequestsWithToursByUser(long userId) {
+        String joinSql = """
+                select * from tour_requests tr
+                 join tours t using(tour_id)
+                  where tr.user_id =?""";
+
+        Map<TourRequest, Tour> tourMap = new HashMap<>();
+
+        try (PreparedStatement pstmt = con.prepareStatement(joinSql)) {
+            pstmt.setLong(1, userId);
+            try (ResultSet resultSet = pstmt.executeQuery()) {
+                while (resultSet.next()) {
+                    TourRequest tourRequest = mapToEntity(resultSet);
+                    Tour tour = Tour.builder()
+                            .tourId(resultSet.getLong("tour_id"))
+                            .maxDiscount(resultSet.getInt("max_discount"))
+                            .tourType(TourType.valueOf(resultSet.getString("tour_type")))
+                            .hotelType(HotelType.valueOf(resultSet.getString("hotel_type")))
+                            .peopleNumber(resultSet.getInt("people_number"))
+                            .price(resultSet.getInt("tour_price"))
+                            .isBurning(resultSet.getBoolean("is_burning"))
+                            .build();
+                    tourMap.put(tourRequest, tour);
+                }
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return tourMap;
     }
 
     @Override

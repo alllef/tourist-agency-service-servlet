@@ -79,35 +79,7 @@ public class ClientService {
                 .collect(Collectors.toList());
     }
 
-    private List<Tour> filterByType(TourType tourType) {
-        return tourDAO.findAll()
-                .stream()
-                .filter(tour -> tour.getTourType().equals(tourType))
-                .sorted()
-                .collect(Collectors.toList());
-    }
-
-    private List<Tour> filterByPrice(int minPrice, int maxPrice) {
-        return tourDAO.findAll()
-                .stream()
-                .filter(tour -> tour.getPrice() >= minPrice && tour.getPrice() <= maxPrice)
-                .sorted()
-                .collect(Collectors.toList());
-    }
-
-    private List<Tour> filterByPeopleNumber(int minPeopleNumber, int maxPeopleNumber) {
-        return tourDAO.findAll()
-                .stream()
-                .filter(tour -> tour.getPeopleNumber() >= minPeopleNumber && tour.getPeopleNumber() <= maxPeopleNumber)
-                .sorted()
-                .collect(Collectors.toList());
-    }
-
-    private List<Tour> filterByHotelType(HotelType hotelType) {
-        return tourDAO.findAll()
-                .stream()
-                .filter(tour -> tour.getHotelType().equals(hotelType))
-                .sorted()
-                .collect(Collectors.toList());
+    public Map<TourRequest, Tour> getRequestsWithToursByUser(User user) {
+        return tourRequestDAO.findTourRequestsWithToursByUser(user.getUserId());
     }
 }
