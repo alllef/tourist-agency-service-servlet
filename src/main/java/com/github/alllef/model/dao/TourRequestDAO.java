@@ -48,7 +48,7 @@ public class TourRequestDAO extends AbstractDAO<TourRequest> {
         try (PreparedStatement pstmt = con.prepareStatement(insertSQL)) {
             pstmt.setLong(1, entity.getUserId());
             pstmt.setString(2, entity.getRequestStatus().toString());
-            pstmt.setInt(3, entity.getDiscount());
+            pstmt.setInt(3, 0);
             pstmt.setLong(4, entity.getTourId());
             pstmt.executeUpdate();
         } catch (SQLException throwables) {

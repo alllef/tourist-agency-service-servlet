@@ -30,9 +30,10 @@ public class ClientService {
         userDAO.create(user);
     }
 
-    public void orderTour(Tour tour) {
+    public void orderTour(long tourId, long userId) {
         TourRequest tourRequest = TourRequest.builder()
-                .tourId(tour.getTourId())
+                .tourId(tourId)
+                .userId(userId)
                 .requestStatus(RequestStatus.REGISTERED)
                 .build();
 
