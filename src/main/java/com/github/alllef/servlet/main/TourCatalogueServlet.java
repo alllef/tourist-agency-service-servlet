@@ -18,7 +18,7 @@ import java.util.Map;
 
 @WebServlet(urlPatterns = "/tours/catalogue")
 public class TourCatalogueServlet extends HttpServlet {
-    private static final String staticTemplate = """
+    private static final String staticTemplate ="%s"; /*"""
             <html>
             <head>
                 <title>Title</title>
@@ -51,7 +51,7 @@ public class TourCatalogueServlet extends HttpServlet {
             </form>
                       
             </body>
-            </html>""";
+            </html>"""*/;
 
     private static final String catalogueTemplate = """
             <b>Type:</b> %s<br>
@@ -77,10 +77,10 @@ public class TourCatalogueServlet extends HttpServlet {
         for (Tour tour : client.filterTours(params))
             resultsPeople.append(String.format(catalogueTemplate, tour.getTourType(), tour.getPrice(), tour.getHotelType(), tour.getPeopleNumber()));
 
-        try (writer; writer) {
+
             String resultString = String.format(staticTemplate, resultsPeople);
             writer.println(resultString);
-        }
+
     }
 
 }

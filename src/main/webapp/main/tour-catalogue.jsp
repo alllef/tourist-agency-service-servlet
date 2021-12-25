@@ -1,5 +1,4 @@
-<%@ page import="jakarta.servlet.jsp." %>
-<%@ page import="jakarta.servlet.jsp.JspWriter" %>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -7,7 +6,8 @@
 </head>
 <body>
 <h1>Tour catalogue</h1><br>
-<p><%= out%></p>
+
+<jsp:include page="/tours/catalogue"/>
 <form id="catalogue-filter" action="catalogue" method="post">
     <h3>Tour type</h3>
     <select form="catalogue-filter" name="tour-type" id="tour-type">
