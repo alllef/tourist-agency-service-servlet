@@ -25,16 +25,31 @@ public class TourCatalogueServlet extends HttpServlet {
             </head>
             <body>
             <h1>Tour catalogue</h1><br>
-                %s
-            <form action="catalogue" method="post">
+            %s
+            <form id="catalogue-filter" action="catalogue" method="post">
+                <h3>Tour type</h3>
+                <select form="catalogue-filter" name="tour-type" id="tour-type">
+                    <option value="REST">Rest</option>
+                    <option value="EXCURSION">Excursion</option>
+                    <option value="SHOPPING">Shopping</option>
+                </select>
+               
                 <h3>Min price</h3>
-                <input id="min-price" name="min-price" type="number" required="required"/>
+                <input id="min-price" name="min-price" type="number"/>
                 <h3>Max price</h3>
-                <input id="max-price" name="max-price" type="number" required="required"/>
-                <h3>Last name</h3>
-                <button type="submit" name="" value="Register" title="Register">Register</button>
+                <input id="max-price" name="max-price" type="number"/>
+                <h3>Min people number</h3>
+                <input id="min-people-number" name="min-people-number" type="number"/>
+                <h3>Max people number</h3>
+                <input id="max-people-number" name="max-people-number" type="number"/>
+                <h3>Hotel type</h3>
+                <select form="catalogue-filter" name="hotel-type" id="hotel-type">
+                    <option value="HOSTEL">Hostel</option>
+                    <option value="ALL_INCLUSIVE">All inclusive</option>
+                </select>
+                <button type="submit" name="" value="Filter" title="Filter">Filter</button>
             </form>
-                        
+                      
             </body>
             </html>""";
 
@@ -53,7 +68,7 @@ public class TourCatalogueServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html");
-        htmlWithTours(resp.getWriter(), req.getParameterMap());
+         htmlWithTours(resp.getWriter(), req.getParameterMap());
     }
 
     public void htmlWithTours(PrintWriter writer, Map<String, String[]> params) {
@@ -63,7 +78,7 @@ public class TourCatalogueServlet extends HttpServlet {
             resultsPeople.append(String.format(catalogueTemplate, tour.getTourType(), tour.getPrice(), tour.getHotelType(), tour.getPeopleNumber()));
 
         try (writer; writer) {
-            String resultString = String.format(staticTemplate, resultsPeople.toString());
+            String resultString = String.format(staticTemplate, resultsPeople);
             writer.println(resultString);
         }
     }
