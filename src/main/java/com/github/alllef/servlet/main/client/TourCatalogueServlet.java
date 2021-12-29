@@ -8,6 +8,7 @@ import com.github.alllef.model.dao.UserDAO;
 import com.github.alllef.model.entity.Tour;
 import com.github.alllef.model.entity.User;
 import com.github.alllef.model.service.ClientService;
+import com.github.alllef.servlet.command.ClientTourCatalogueCommand;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -24,12 +25,12 @@ public class TourCatalogueServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/html");
-        htmlWithTours(resp.getWriter(), req.getParameterMap());
+        new ClientTourCatalogueCommand().execute(req, resp);
     }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/html");
+        new ClientTourCatalogueCommand().execute(req, resp);
         if (req.getParameter("order") != null) {
             HttpSession session = req.getSession(false);
             User user = (User) session.getAttribute("user");
@@ -39,16 +40,7 @@ public class TourCatalogueServlet extends HttpServlet {
             client.orderTour(tourId, user.getUserId());
         }
 
-        req.getRequestDispatcher("/main/tour-catalogue.jsp").forward(req,resp);
-        htmlWithTours(resp.getWriter(), req.getParameterMap());
+        req.getRequestDispatcher("/main/tour-catalogue.jsp").forward(req, resp);
     }
 
-    public void htmlWithTours(PrintWriter writer, Map<String, String[]> params) {
-        DaoFactory daoFactory = DaoFactory.getInstance();
-        ClientService client = new ClientService(daoFactory.getTourDAO(), daoFactory.getTourRequestDAO(), daoFactory.getUserDAO());
-        StringBuilder resultsPeople = new StringBuilder();
-        for (Tour tour : client.filterTours(params))
-            resultsPeople.append(String.format(catalogueTemplate, tour.getTourType(), tour.getPrice(), tour.getHotelType(), tour.getPeopleNumber(), tour.getTourId()));
-        writer.println(resultsPeople);
-    }
 }

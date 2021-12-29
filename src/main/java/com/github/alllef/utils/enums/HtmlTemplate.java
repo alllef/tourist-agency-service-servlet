@@ -102,6 +102,7 @@ public enum HtmlTemplate {
                         </form>
                         <b>Final price: </b>%d <br>
             """);
+
     private String template;
 
 }

@@ -10,6 +10,7 @@ import com.github.alllef.model.entity.TourRequest;
 import com.github.alllef.model.entity.User;
 import com.github.alllef.model.service.ClientService;
 import com.github.alllef.model.service.ManagerService;
+import com.github.alllef.servlet.command.ClientTourRequestCommand;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -25,24 +26,7 @@ import java.util.Set;
 public class MyAccountServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/html");
-        DaoFactory daoFactory = DaoFactory.getInstance();
-        ClientService client = new ClientService(daoFactory.getTourDAO(), daoFactory.getTourRequestDAO(), daoFactory.getUserDAO());
-
-        HttpSession session = req.getSession(false);
-        User user = (User) session.getAttribute("user");
-        var tourRequests = client.getRequestsWithToursByUser(user);
-
-        PrintWriter out = resp.getWriter();
-        for (TourRequest tourRequest : tourRequests.keySet())
-            out.println(formTemplate(tourRequest, tourRequests.get(tourRequest)));
-
-    }
-
-    private String formTemplate(TourRequest tourRequest, Tour tour) {
-        int finalPrice = ((100 - tourRequest.getDiscount()) * tour.getPrice()) / 100;
-        return String.format(tourRequestTemplate, tour.getTourType().toString(), tour.getPrice(), tour.getHotelType().toString(),
-                tour.getPeopleNumber(), tourRequest.getRequestStatus(), tourRequest.getDiscount(), finalPrice);
+        new ClientTourRequestCommand().execute(req, resp);
     }
 }
 

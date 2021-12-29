@@ -18,7 +18,6 @@ import java.sql.SQLException;
 
 @WebServlet("/managing/tour-requests")
 public class TourRequestManagerServlet extends HttpServlet {
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html");

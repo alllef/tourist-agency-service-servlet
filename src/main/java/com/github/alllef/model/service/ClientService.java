@@ -1,5 +1,6 @@
 package com.github.alllef.model.service;
 
+import com.github.alllef.model.dao.DaoFactory;
 import com.github.alllef.model.dao.TourDAO;
 import com.github.alllef.model.dao.TourRequestDAO;
 import com.github.alllef.model.dao.UserDAO;
@@ -14,7 +15,6 @@ import lombok.AllArgsConstructor;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.BinaryOperator;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
@@ -22,6 +22,16 @@ import java.util.stream.Stream;
 
 @AllArgsConstructor
 public class ClientService {
+    private static ClientService clientService;
+
+    public static ClientService getInstance() {
+        if (clientService == null) {
+            DaoFactory daoFactory = DaoFactory.getInstance();
+            clientService = new ClientService(daoFactory.getTourDAO(), daoFactory.getTourRequestDAO(),daoFactory.getUserDAO());
+        }
+        return clientService;
+    }
+
     private final TourDAO tourDAO;
     private final TourRequestDAO tourRequestDAO;
     private final UserDAO userDAO;

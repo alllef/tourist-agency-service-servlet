@@ -1,5 +1,6 @@
 package com.github.alllef.model.service;
 
+import com.github.alllef.model.dao.DaoFactory;
 import com.github.alllef.model.dao.TourDAO;
 import com.github.alllef.model.dao.TourRequestDAO;
 import com.github.alllef.model.dao.UserDAO;
@@ -11,6 +12,16 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class AdminService extends ManagerService {
+    private static AdminService adminService;
+
+    public static AdminService getInstance() {
+        if (adminService == null) {
+            DaoFactory daoFactory = DaoFactory.getInstance();
+            adminService = new AdminService(daoFactory.getTourDAO(),daoFactory.getTourRequestDAO(),daoFactory.getUserDAO());
+        }
+        return adminService;
+    }
+
     private final UserDAO userDAO;
 
     public AdminService(TourDAO tourDAO, TourRequestDAO tourRequestDAO, UserDAO userDAO) {
