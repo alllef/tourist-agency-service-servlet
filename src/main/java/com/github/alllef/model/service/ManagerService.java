@@ -7,20 +7,20 @@ import com.github.alllef.model.entity.TourRequest;
 import com.github.alllef.utils.enums.TourType;
 import lombok.AllArgsConstructor;
 
+import java.sql.SQLException;
+
 @AllArgsConstructor
 public class ManagerService {
     protected final TourDAO tourDAO;
     protected final TourRequestDAO tourRequestDAO;
 
-    public void setBurningTour(Tour tour) {
-        Tour burningTour = tour.toBuilder()
-                .isBurning(true)
+    public void updateTour(long id, int maxDiscount, boolean isBurning) throws SQLException {
+        Tour tour = tourDAO.findById(id).orElseThrow();
+        Tour updated = tour.toBuilder()
+                .maxDiscount(maxDiscount)
+                .isBurning(isBurning)
                 .build();
-        tourDAO.update(burningTour);
-    }
-
-    public void updateTour(Tour tour) {
-        tourDAO.update(tour);
+        tourDAO.update(updated);
     }
 
     public void setTourRequestDiscount(TourRequest tourRequest, int discount) {

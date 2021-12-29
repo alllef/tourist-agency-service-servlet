@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class UserDAO extends AbstractDAO<User> {
     private static UserDAO userDAO = null;
@@ -21,6 +22,18 @@ public class UserDAO extends AbstractDAO<User> {
 
     private UserDAO(Connection connection) {
         super("users", connection);
+    }
+
+    @Override
+    public Optional<User> findById(long id) throws SQLException {
+        String findById = "select * from users where user_id=?";
+        try (PreparedStatement pstmt = con.prepareStatement(findById)) {
+            pstmt.setLong(1, id);
+            ResultSet resultSet = pstmt.executeQuery();
+            if (resultSet.next())
+                return Optional.of(mapToEntity(resultSet));
+        }
+        return Optional.empty();
     }
 
     @Override
@@ -51,8 +64,8 @@ public class UserDAO extends AbstractDAO<User> {
         try (PreparedStatement pstmt = con.prepareStatement(findByEmailSQL)) {
             pstmt.setString(1, email);
             ResultSet resultSet = pstmt.executeQuery();
-            while (resultSet.next())
-            return mapToEntity(resultSet);
+            if (resultSet.next())
+                return mapToEntity(resultSet);
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();

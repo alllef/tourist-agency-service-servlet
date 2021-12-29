@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class TourDAO extends AbstractDAO<Tour> {
     private static TourDAO tourDAO = null;
@@ -25,24 +26,37 @@ public class TourDAO extends AbstractDAO<Tour> {
     }
 
     @Override
+    public Optional<Tour> findById(long id) throws SQLException {
+        String findById = "select * from tours where tour_id=?";
+        try (PreparedStatement pstmt = con.prepareStatement(findById)) {
+            pstmt.setLong(1, id);
+            ResultSet resultSet = pstmt.executeQuery();
+            if (resultSet.next())
+                return Optional.of(mapToEntity(resultSet));
+        }
+        return Optional.empty();
+    }
+
+    @Override
     public void update(Tour entity) {
         String updatePositionSql = String.format("""
                 UPDATE %s
-                 SET discount_max=?,
+                 SET max_discount=?,
                  tour_type=?,
                  hotel_type=?,
                  people_number=?,
-                 price=?,
+                 tour_price=?,
                  is_burning=?
-                 WHERE tour_request_id=?""", tableName);
+                 WHERE tour_id=?""", tableName);
 
         try (PreparedStatement pstmt = con.prepareStatement(updatePositionSql)) {
             pstmt.setInt(1, entity.getMaxDiscount());
             pstmt.setString(2, entity.getTourType().toString());
             pstmt.setString(3, entity.getHotelType().toString());
-            pstmt.setInt(4, entity.getPrice());
-            pstmt.setBoolean(5, entity.isBurning());
-            pstmt.setLong(6, entity.getTourId());
+            pstmt.setInt(4,entity.getPeopleNumber());
+            pstmt.setInt(5, entity.getPrice());
+            pstmt.setBoolean(6, entity.isBurning());
+            pstmt.setLong(7, entity.getTourId());
             pstmt.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();

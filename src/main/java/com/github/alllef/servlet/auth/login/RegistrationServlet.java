@@ -1,6 +1,7 @@
 package com.github.alllef.servlet.auth.login;
 
 import com.github.alllef.model.ConnectionSingleton;
+import com.github.alllef.model.dao.DaoFactory;
 import com.github.alllef.model.dao.TourDAO;
 import com.github.alllef.model.dao.TourRequestDAO;
 import com.github.alllef.model.dao.UserDAO;
@@ -22,7 +23,9 @@ public class RegistrationServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ClientService client = new ClientService(new TourDAO(ConnectionSingleton.getConnection()), new TourRequestDAO(ConnectionSingleton.getConnection()), new UserDAO(ConnectionSingleton.getConnection()));
+        DaoFactory daoFactory = DaoFactory.getInstance();
+
+        ClientService client = new ClientService(daoFactory.getTourDAO(), daoFactory.getTourRequestDAO(), daoFactory.getUserDAO());
         String email = req.getParameter("email");
         Optional<User> userOpt = client.findByEmail(email);
         if (userOpt.isPresent()) {

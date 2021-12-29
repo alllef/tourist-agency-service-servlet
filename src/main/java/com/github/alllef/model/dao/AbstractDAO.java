@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 public abstract class AbstractDAO<T> {
@@ -29,6 +30,7 @@ public abstract class AbstractDAO<T> {
         return tourList;
     }
 
+    public abstract Optional<T> findById(long id) throws SQLException;
     public abstract void update(T entity);
 
     public abstract void create(T entity);

@@ -1,6 +1,7 @@
 package com.github.alllef.servlet.auth.filter;
 
 import com.github.alllef.model.ConnectionSingleton;
+import com.github.alllef.model.dao.DaoFactory;
 import com.github.alllef.model.dao.TourDAO;
 import com.github.alllef.model.dao.TourRequestDAO;
 import com.github.alllef.model.dao.UserDAO;
@@ -26,8 +27,8 @@ public class AuthorizationFilter implements DefaultFilter {
         String loginURI = request.getContextPath() + "/login";
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-
-        ClientService client = new ClientService(new TourDAO(ConnectionSingleton.getConnection()), new TourRequestDAO(ConnectionSingleton.getConnection()), new UserDAO(ConnectionSingleton.getConnection()));
+        DaoFactory daoFactory = DaoFactory.getInstance();
+        ClientService client = new ClientService(daoFactory.getTourDAO(), daoFactory.getTourRequestDAO(), daoFactory.getUserDAO());
 
         if (session.getAttribute("user") != null)
             filterChain.doFilter(request, response);

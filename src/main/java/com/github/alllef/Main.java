@@ -9,7 +9,7 @@ import com.github.alllef.utils.enums.TourType;
 public class Main {
 
     public static void main(String[] args) {
-        TourDAO tourDAO = new TourDAO(ConnectionSingleton.getConnection());
-        System.out.println(tourDAO.findAll());
+        // TourDAO tourDAO = new TourDAO(ConnectionSingleton.getConnection());
+        //System.out.println(tourDAO.findAll());
     }
 }

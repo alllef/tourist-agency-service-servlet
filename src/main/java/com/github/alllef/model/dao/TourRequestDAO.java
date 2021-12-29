@@ -3,6 +3,7 @@ package com.github.alllef.model.dao;
 import com.github.alllef.model.ConnectionSingleton;
 import com.github.alllef.model.entity.Tour;
 import com.github.alllef.model.entity.TourRequest;
+import com.github.alllef.model.entity.User;
 import com.github.alllef.utils.enums.HotelType;
 import com.github.alllef.utils.enums.RequestStatus;
 import com.github.alllef.utils.enums.TourType;
@@ -14,6 +15,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class TourRequestDAO extends AbstractDAO<TourRequest> {
     private static TourRequestDAO tourDAO = null;
@@ -27,6 +29,18 @@ public class TourRequestDAO extends AbstractDAO<TourRequest> {
 
     private TourRequestDAO(Connection connection) {
         super("tour_requests", connection);
+    }
+
+    @Override
+    public Optional<TourRequest> findById(long id) throws SQLException {
+        String findById = "select * from tour_requests where tour_request_id=?";
+        try (PreparedStatement pstmt = con.prepareStatement(findById)) {
+            pstmt.setLong(1, id);
+            ResultSet resultSet = pstmt.executeQuery();
+            if (resultSet.next())
+                return Optional.of(mapToEntity(resultSet));
+        }
+        return Optional.empty();
     }
 
     @Override
