@@ -44,7 +44,7 @@ public class MyAccountServlet extends HttpServlet {
         var tourRequests = client.getRequestsWithToursByUser(user);
 
         PrintWriter out = resp.getWriter();
-        for (TourRequest tourRequest : client.getRequestsWithToursByUser(user).keySet())
+        for (TourRequest tourRequest : tourRequests.keySet())
             out.println(formTemplate(tourRequest, tourRequests.get(tourRequest)));
 
     }

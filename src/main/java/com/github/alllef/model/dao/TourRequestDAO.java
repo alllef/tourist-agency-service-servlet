@@ -123,6 +123,35 @@ public class TourRequestDAO extends AbstractDAO<TourRequest> {
         return tourMap;
     }
 
+    public Map<TourRequest, Tour> findTourRequestsWithTours() {
+        String joinSql = """
+                select * from tour_requests tr
+                 join tours t using(tour_id)""";
+
+        Map<TourRequest, Tour> tourMap = new HashMap<>();
+
+        try (PreparedStatement pstmt = con.prepareStatement(joinSql)) {
+            try (ResultSet resultSet = pstmt.executeQuery()) {
+                while (resultSet.next()) {
+                    TourRequest tourRequest = mapToEntity(resultSet);
+                    Tour tour = Tour.builder()
+                            .tourId(resultSet.getLong("tour_id"))
+                            .maxDiscount(resultSet.getInt("max_discount"))
+                            .tourType(TourType.valueOf(resultSet.getString("tour_type")))
+                            .hotelType(HotelType.valueOf(resultSet.getString("hotel_type")))
+                            .peopleNumber(resultSet.getInt("people_number"))
+                            .price(resultSet.getInt("tour_price"))
+                            .isBurning(resultSet.getBoolean("is_burning"))
+                            .build();
+                    tourMap.put(tourRequest, tour);
+                }
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return tourMap;
+    }
+
     @Override
     public TourRequest mapToEntity(ResultSet resultSet) throws SQLException {
         return TourRequest.builder()

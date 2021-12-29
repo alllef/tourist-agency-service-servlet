@@ -14,14 +14,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 
-@WebServlet("/managing")
+@WebServlet("/managing/tours")
 public class TourManagerServlet extends HttpServlet {
     private static final String managerCatalogueTemplate = """
             <b>Type:</b> %s<br>
             <b>Price:</b> %d<br>
             <b>Hotel type:</b> %s<br>
             <b>Number of people:</b> %d<br>
-            <form id="manager-update" action="managing" method="post">
+            <form id="manager-update" action="managing/tours" method="post">
                         <h3>Max discount</h3>
                            <input id="discount" name="max-discount" value="%d" type="number"/>
                        <p><input name="burning" type="radio" value ="true" %s>Burning</p>

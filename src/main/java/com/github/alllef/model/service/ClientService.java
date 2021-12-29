@@ -83,4 +83,8 @@ public class ClientService {
     public Map<TourRequest, Tour> getRequestsWithToursByUser(User user) {
         return tourRequestDAO.findTourRequestsWithToursByUser(user.getUserId());
     }
+
+    public Map<TourRequest,Tour> getRequestsWithTours(){
+        return tourRequestDAO.findTourRequestsWithTours();
+    }
 }
