@@ -26,8 +26,8 @@ public class AdminService extends ManagerService {
         tourDAO.update(tour);
     }
 
-    public void deleteTour(Tour tour) {
-        tourDAO.delete(tour.getTourId());
+    public void deleteTour(long tourId) {
+        tourDAO.delete(tourId);
     }
 
     public void setUserBlocked(long userId) throws SQLException {

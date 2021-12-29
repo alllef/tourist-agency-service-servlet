@@ -3,6 +3,7 @@ package com.github.alllef.servlet.main;
 import com.github.alllef.model.dao.DaoFactory;
 import com.github.alllef.model.entity.Tour;
 import com.github.alllef.model.entity.User;
+import com.github.alllef.model.service.AdminService;
 import com.github.alllef.model.service.ClientService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -25,6 +26,10 @@ public class TourCatalogueAdminServlet extends HttpServlet {
             <form id="order" action="tour" method="get">
                        <button type="submit" name="change-info" value="%d" title="change-info">Change info</button>
                         </form>
+                        
+            <form id="delete-form" action="tour-catalogue" method="post">
+            <button type="submit" name="delete" value="%d" title="delete">Delete</button>
+                        </form>
             """;
 
     @Override
@@ -36,6 +41,14 @@ public class TourCatalogueAdminServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html");
+        String deleteId = req.getParameter("delete");
+
+        if (deleteId != null) {
+            DaoFactory daoFactory = DaoFactory.getInstance();
+            AdminService adminService = new AdminService(daoFactory.getTourDAO(), daoFactory.getTourRequestDAO(), daoFactory.getUserDAO());
+            adminService.deleteTour(Long.parseLong(deleteId));
+        }
+
         htmlWithTours(resp.getWriter(), req.getParameterMap());
        /*long tourId = Long.parseLong(req.getParameter("order"));
         HttpSession session = req.getSession(false);
@@ -52,7 +65,8 @@ public class TourCatalogueAdminServlet extends HttpServlet {
         ClientService client = new ClientService(daoFactory.getTourDAO(), daoFactory.getTourRequestDAO(), daoFactory.getUserDAO());
         StringBuilder resultsPeople = new StringBuilder();
         for (Tour tour : client.filterTours(params))
-            resultsPeople.append(String.format(catalogueTemplate, tour.getTourType(), tour.getPrice(), tour.getHotelType(), tour.getPeopleNumber(), tour.getTourId()));
+            resultsPeople.append(String.format(catalogueTemplate, tour.getTourType(), tour.getPrice(),
+                    tour.getHotelType(), tour.getPeopleNumber(), tour.getTourId(), tour.getTourId()));
         writer.println(resultsPeople);
     }
 

@@ -88,6 +88,7 @@ public class TourDAO extends AbstractDAO<Tour> {
         String deleteQuery = String.format("DELETE FROM %s where tour_id=?", tableName);
         try (PreparedStatement pstmt = con.prepareStatement(deleteQuery)) {
             pstmt.setLong(1, id);
+            pstmt.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
