@@ -24,6 +24,10 @@ public class ManagerService {
         tourDAO.update(updated);
     }
 
+    public Tour getTourById(long tourId) throws SQLException {
+        return tourDAO.findById(tourId).orElseThrow();
+    }
+
     public void updateTourRequest(long tourRequestId, int discount, RequestStatus requestStatus) throws SQLException {
         TourRequest tourRequest = tourRequestDAO.findById(tourRequestId).orElseThrow();
 

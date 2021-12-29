@@ -22,6 +22,10 @@ public class AdminService extends ManagerService {
         tourDAO.create(tour);
     }
 
+    public void updateTour(Tour tour) {
+        tourDAO.update(tour);
+    }
+
     public void deleteTour(Tour tour) {
         tourDAO.delete(tour.getTourId());
     }
@@ -32,7 +36,7 @@ public class AdminService extends ManagerService {
                 .isBlocked(!user.isBlocked())
                 .build();
         userDAO.update(updated);
-}
+    }
 
     public List<User> getClients() {
         return userDAO.findUsersByType(UserType.CLIENT);

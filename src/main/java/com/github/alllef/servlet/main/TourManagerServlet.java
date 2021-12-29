@@ -54,7 +54,7 @@ public class TourManagerServlet extends HttpServlet {
         int maxDiscount = Integer.parseInt(req.getParameter("max-discount"));
 
         try {
-            managerService.updateTour(tourId,maxDiscount,isBurning);
+            managerService.updateTour(tourId, maxDiscount, isBurning);
         } catch (SQLException e) {
             e.printStackTrace();
         }
