@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class UserDAO extends AbstractDAO<User> {
@@ -42,9 +44,10 @@ public class UserDAO extends AbstractDAO<User> {
                 UPDATE %s
                  SET user_type=?,
                  first_name=?,
-                 last_name=?
+                 last_name=?,
                  email=?,
-                 password=?
+                 user_password=?,
+                 is_blocked=?
                  WHERE user_id=?""", tableName);
         try (PreparedStatement pstmt = con.prepareStatement(updatePositionSql)) {
             pstmt.setString(1, entity.getUserType().toString());
@@ -52,9 +55,11 @@ public class UserDAO extends AbstractDAO<User> {
             pstmt.setString(3, entity.getLastName());
             pstmt.setString(4, entity.getEmail());
             pstmt.setString(5, entity.getPassword());
-            pstmt.setLong(6, entity.getUserId());
+            pstmt.setBoolean(6, entity.isBlocked());
+            pstmt.setLong(7, entity.getUserId());
             pstmt.executeUpdate();
         } catch (SQLException throwables) {
+            System.out.println("Watafuck");
             throwables.printStackTrace();
         }
     }
@@ -71,6 +76,22 @@ public class UserDAO extends AbstractDAO<User> {
             throwables.printStackTrace();
         }
         return null;
+    }
+
+    public List<User> findUsersByType(UserType userType) {
+        List<User> usersList = new ArrayList<>();
+
+        String findByEmailSQL = "select * from users where user_type =?";
+        try (PreparedStatement pstmt = con.prepareStatement(findByEmailSQL)) {
+            pstmt.setString(1, userType.toString());
+            ResultSet resultSet = pstmt.executeQuery();
+            while (resultSet.next())
+                usersList.add(mapToEntity(resultSet));
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return usersList;
     }
 
     @Override
@@ -109,6 +130,7 @@ public class UserDAO extends AbstractDAO<User> {
                 .lastName(resultSet.getString("last_name"))
                 .userType(UserType.valueOf(resultSet.getString("user_type")))
                 .password(resultSet.getString("user_password"))
+                .isBlocked(resultSet.getBoolean("is_blocked"))
                 .build();
     }
 }

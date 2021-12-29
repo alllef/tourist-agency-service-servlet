@@ -5,6 +5,10 @@ import com.github.alllef.model.dao.TourRequestDAO;
 import com.github.alllef.model.dao.UserDAO;
 import com.github.alllef.model.entity.Tour;
 import com.github.alllef.model.entity.User;
+import com.github.alllef.utils.enums.UserType;
+
+import java.sql.SQLException;
+import java.util.List;
 
 public class AdminService extends ManagerService {
     private final UserDAO userDAO;
@@ -22,9 +26,15 @@ public class AdminService extends ManagerService {
         tourDAO.delete(tour.getTourId());
     }
 
-    public void setUserBlocked(User user, boolean isBlocked) {
-        User user1 = user.toBuilder()
-                .isBlocked(isBlocked)
+    public void setUserBlocked(long userId) throws SQLException {
+        User user = userDAO.findById(userId).orElseThrow();
+        User updated = user.toBuilder()
+                .isBlocked(!user.isBlocked())
                 .build();
+        userDAO.update(updated);
+}
+
+    public List<User> getClients() {
+        return userDAO.findUsersByType(UserType.CLIENT);
     }
 }
