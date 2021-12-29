@@ -1,4 +1,4 @@
-package com.github.alllef.servlet.main;
+package com.github.alllef.servlet.main.client;
 
 import com.github.alllef.model.ConnectionSingleton;
 import com.github.alllef.model.dao.DaoFactory;
@@ -21,32 +21,25 @@ import java.util.Map;
 
 @WebServlet(urlPatterns = "/tours/catalogue")
 public class TourCatalogueServlet extends HttpServlet {
-    private static final String catalogueTemplate = """
-            <b>Type:</b> %s<br>
-            <b>Price:</b> %d<br>
-            <b>Hotel type:</b> %s<br>
-            <b>Number of people:</b> %d<br>
-            <form id="order" action="catalogue" method="post">
-                       <button type="submit" name="order" value="%d" title="Order">Order</button>
-                        </form>
-            """;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html");
         htmlWithTours(resp.getWriter(), req.getParameterMap());
     }
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html");
-        long tourId = Long.parseLong(req.getParameter("order"));
-        HttpSession session = req.getSession(false);
-        User user = (User) session.getAttribute("user");
-        DaoFactory daoFactory = DaoFactory.getInstance();
-        ClientService client = new ClientService(daoFactory.getTourDAO(), daoFactory.getTourRequestDAO(), daoFactory.getUserDAO());
+        if (req.getParameter("order") != null) {
+            HttpSession session = req.getSession(false);
+            User user = (User) session.getAttribute("user");
+            long tourId = Long.parseLong(req.getParameter("order"));
+            DaoFactory daoFactory = DaoFactory.getInstance();
+            ClientService client = new ClientService(daoFactory.getTourDAO(), daoFactory.getTourRequestDAO(), daoFactory.getUserDAO());
+            client.orderTour(tourId, user.getUserId());
+        }
 
-        client.orderTour(tourId, user.getUserId());
+        req.getRequestDispatcher("/main/tour-catalogue.jsp").forward(req,resp);
         htmlWithTours(resp.getWriter(), req.getParameterMap());
     }
 

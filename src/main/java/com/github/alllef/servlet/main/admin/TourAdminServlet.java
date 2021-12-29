@@ -1,4 +1,4 @@
-package com.github.alllef.servlet.main;
+package com.github.alllef.servlet.main.admin;
 
 import com.github.alllef.model.dao.DaoFactory;
 import com.github.alllef.model.entity.Tour;
@@ -20,30 +20,6 @@ import static com.github.alllef.utils.enums.RequestStatus.*;
 
 @WebServlet("/admin/tour")
 public class TourAdminServlet extends HttpServlet {
-    private static final String tourFormTemplate = """
-               <form id="tour-form" action="tour" method="post">
-               <h3>Tour type</h3>
-                <select form="tour-form" name="tour-type" id="tour-type">
-                    <option value="REST" %s>Rest</option>
-                    <option value="EXCURSION" %s>Excursion</option>
-                    <option value="SHOPPING" %s>Shopping</option>
-                </select>
-                        
-                <h3>Price</h3>
-                <input id="price" name="price" value="%d" type="number"/>
-                <h3>People number</h3>
-                <input id="people-number" name="people-number" value="%d" type="number"/>
-                <h3>Hotel type</h3>
-                <select form="tour-form" name="hotel-type" id="hotel-type">
-                    <option value="HOSTEL" %s>Hostel</option>
-                    <option value="ALL_INCLUSIVE" %s>All inclusive</option>
-                </select>
-                <h3>Max discount</h3>
-                <input id="max-discount" name="max-discount" value="%d" type="number"/>
-                <p><input name="burning" type="radio" value ="true" %s>Burning</p>
-                <button type="submit" name="save" value="%d" title="Save">Save</button>
-            </form>
-            """;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

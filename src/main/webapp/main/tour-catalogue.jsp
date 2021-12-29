@@ -8,7 +8,7 @@
 <h1>Tour catalogue</h1><br>
 
 <jsp:include page="/tours/catalogue"/>
-<form id="catalogue-filter" action="catalogue" method="post">
+<form id="catalogue-filter" action="/tours/catalogue" method="post">
     <h3>Tour type</h3>
     <select form="catalogue-filter" name="tour-type" id="tour-type">
         <option value="REST">Rest</option>

@@ -1,4 +1,4 @@
-package com.github.alllef.servlet.main;
+package com.github.alllef.servlet.main.manager;
 
 import com.github.alllef.model.dao.DaoFactory;
 import com.github.alllef.model.entity.Tour;
@@ -16,18 +16,6 @@ import java.sql.SQLException;
 
 @WebServlet("/managing/tours")
 public class TourManagerServlet extends HttpServlet {
-    private static final String managerCatalogueTemplate = """
-            <b>Type:</b> %s<br>
-            <b>Price:</b> %d<br>
-            <b>Hotel type:</b> %s<br>
-            <b>Number of people:</b> %d<br>
-            <form id="manager-update" action="managing/tours" method="post">
-                        <h3>Max discount</h3>
-                           <input id="discount" name="max-discount" value="%d" type="number"/>
-                       <p><input name="burning" type="radio" value ="true" %s>Burning</p>
-                       <button type="submit" name="update-tour" value ="%d" title="update-tour">Update tour</button>
-                        </form>
-            """;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

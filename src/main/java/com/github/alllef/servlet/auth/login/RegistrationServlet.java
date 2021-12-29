@@ -20,7 +20,6 @@ import java.util.Optional;
 
 @WebServlet("/register")
 public class RegistrationServlet extends HttpServlet {
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         DaoFactory daoFactory = DaoFactory.getInstance();

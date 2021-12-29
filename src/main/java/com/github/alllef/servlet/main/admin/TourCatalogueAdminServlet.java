@@ -1,4 +1,4 @@
-package com.github.alllef.servlet.main;
+package com.github.alllef.servlet.main.admin;
 
 import com.github.alllef.model.dao.DaoFactory;
 import com.github.alllef.model.entity.Tour;
@@ -18,19 +18,6 @@ import java.util.Map;
 
 @WebServlet("/admin/tour-catalogue")
 public class TourCatalogueAdminServlet extends HttpServlet {
-    private static final String catalogueTemplate = """
-            <b>Type:</b> %s<br>
-            <b>Price:</b> %d<br>
-            <b>Hotel type:</b> %s<br>
-            <b>Number of people:</b> %d<br>
-            <form id="order" action="tour" method="get">
-                       <button type="submit" name="change-info" value="%d" title="change-info">Change info</button>
-                        </form>
-                        
-            <form id="delete-form" action="tour-catalogue" method="post">
-            <button type="submit" name="delete" value="%d" title="delete">Delete</button>
-                        </form>
-            """;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

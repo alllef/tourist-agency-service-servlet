@@ -1,4 +1,4 @@
-package com.github.alllef.servlet.main;
+package com.github.alllef.servlet.main.admin;
 
 import com.github.alllef.model.dao.DaoFactory;
 import com.github.alllef.model.entity.Tour;
@@ -21,15 +21,6 @@ import java.util.List;
 
 @WebServlet("/admin/users")
 public class UserAdminServlet extends HttpServlet {
-    private static final String adminUsersCatalogueTemplate = """
-                        <b>First name: </b>%s<br>
-                        <b>Last name: </b>%s<br>
-                        <b>Email</b>%s<br>
-                        <form id="user-block-request" action="users" method="post">
-                       
-                       <button type="submit" name="block-user" value ="%d" title="block-user">%s</button>
-                        </form>
-            """;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

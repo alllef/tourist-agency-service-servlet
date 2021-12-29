@@ -23,7 +23,7 @@ public class AuthorizationFilter implements DefaultFilter {
     public void doHttpFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         HttpSession session = request.getSession();
-        session.setMaxInactiveInterval(30);
+        session.setMaxInactiveInterval(120);
         String loginURI = request.getContextPath() + "/login";
         String email = request.getParameter("email");
         String password = request.getParameter("password");

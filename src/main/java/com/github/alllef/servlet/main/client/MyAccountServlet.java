@@ -1,4 +1,4 @@
-package com.github.alllef.servlet.main;
+package com.github.alllef.servlet.main.client;
 
 import com.github.alllef.model.ConnectionSingleton;
 import com.github.alllef.model.dao.DaoFactory;
@@ -23,16 +23,6 @@ import java.util.Set;
 
 @WebServlet("/my-account")
 public class MyAccountServlet extends HttpServlet {
-    private static final String tourRequestTemplate = """
-            <b>Type: </b>%s<br>
-            <b>Price: </b>%d<br>
-            <b>Hotel type: </b>%s<br>
-            <b>Number of people: </b>%d<br>
-            <b>Status: </b>%s<br>
-            <b>My discount: </b>%d%%<br>
-            <b>Final price: </b>%d <br>
-            """;
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html");
