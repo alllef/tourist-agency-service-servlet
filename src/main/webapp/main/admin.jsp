@@ -15,7 +15,7 @@
     <button type="submit" name="tour-catalogue" value="tour-catalogue" title="tour-catalogue">Go to the tour catalogue</button>
 </form>
 
-<form action="admin/users" method="get">
+<form action="admin/clients" method="get">
     <button type="submit" name="admin-users" value="admin-users" title="admin-users">Manage blocked and unblocked users</button>
 </form>
 

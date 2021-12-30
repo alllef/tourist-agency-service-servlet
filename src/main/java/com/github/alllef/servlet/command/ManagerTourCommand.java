@@ -23,7 +23,7 @@ public class ManagerTourCommand extends HtmlCommand {
     }
 
     @Override
-    public Optional<String> execute(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+    public Optional<String> execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         super.execute(request, response);
         if (request.getMethod().equals("POST"))
             updateTour(request);
@@ -34,7 +34,7 @@ public class ManagerTourCommand extends HtmlCommand {
         return Optional.empty();
     }
 
-    public void updateTour(HttpServletRequest req) throws SQLException {
+    public void updateTour(HttpServletRequest req)  {
         long tourId = Long.parseLong(req.getParameter("update-tour"));
         boolean isBurning = Boolean.parseBoolean(req.getParameter("burning"));
         int maxDiscount = Integer.parseInt(req.getParameter("max-discount"));

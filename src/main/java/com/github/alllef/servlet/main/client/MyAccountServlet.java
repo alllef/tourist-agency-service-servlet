@@ -29,6 +29,7 @@ import java.util.Set;
 public class MyAccountServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("Account path"+ req.getServletPath());
         ServletCommand command = CommandList.findCommand(req.getServletPath()).getServletCommand();
         Optional<String> forwardingPage = command.execute(req,resp);
         if (forwardingPage.isPresent())

@@ -37,8 +37,7 @@ public class AuthorizationFilter implements DefaultFilter {
             if (userOpt.isPresent() && userOpt.get().getPassword().equals(password)) {
                 session.setAttribute("user", userOpt.get());
                 filterChain.doFilter(request, response);
-            }
-            else if(request.getServletPath().equals("/login")||request.getServletPath().equals("/register"))
+            } else if (request.getServletPath().equals("/login") || request.getServletPath().equals("/register"))
                 filterChain.doFilter(request, response);
             else
                 response.sendRedirect(loginURI);

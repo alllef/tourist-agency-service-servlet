@@ -8,5 +8,5 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 public interface ServletCommand {
-    Optional<String> execute(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException;
+    Optional<String> execute(HttpServletRequest request, HttpServletResponse response) throws IOException;
 }

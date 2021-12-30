@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-//@WebFilter(filterName = "authentication", urlPatterns = "/*")
+@WebFilter(filterName = "authentication", urlPatterns = "/*")
 public class AuthenticationFilter implements DefaultFilter {
     @Override
     public void doHttpFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -23,7 +23,10 @@ public class AuthenticationFilter implements DefaultFilter {
             System.out.println(user + "User");
             if (SecurityUtils.hasPermission(user.getUserType(), (request.getServletPath())))
                 filterChain.doFilter(request, response);
-            else response.sendRedirect(loginURI);
+            else {
+                System.out.println(request.getServletPath());
+                response.sendRedirect(loginURI);
+            }
         }
     }
 }

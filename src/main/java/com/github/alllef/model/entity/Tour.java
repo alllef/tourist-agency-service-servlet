@@ -21,8 +21,8 @@ public class Tour implements Comparable<Tour> {
 
     @Override
     public int compareTo(Tour o) {
-        if (this.isBurning && !o.isBurning) return 1;
-        else if (!this.isBurning && o.isBurning) return -1;
+        if (this.isBurning && !o.isBurning) return -1;
+        else if (!this.isBurning && o.isBurning) return 1;
         else return 0;
     }
 }

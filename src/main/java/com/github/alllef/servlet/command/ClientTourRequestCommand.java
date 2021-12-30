@@ -24,7 +24,7 @@ public class ClientTourRequestCommand extends HtmlCommand {
     }
 
     @Override
-    public Optional<String> execute(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+    public Optional<String> execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         super.execute(request, response);
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute("user");

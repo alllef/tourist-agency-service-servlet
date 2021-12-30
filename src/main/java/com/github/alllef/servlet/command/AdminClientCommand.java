@@ -20,7 +20,7 @@ public class AdminClientCommand extends HtmlCommand {
     }
 
     @Override
-    public Optional<String> execute(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+    public Optional<String> execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         super.execute(request, response);
         if (request.getMethod().equals("POST"))
             blockUser(request.getParameter("block-user"));

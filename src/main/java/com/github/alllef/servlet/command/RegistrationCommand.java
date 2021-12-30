@@ -19,9 +19,9 @@ public class RegistrationCommand implements ServletCommand {
     }
 
     @Override
-    public Optional<String> execute(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+    public Optional<String> execute(HttpServletRequest request, HttpServletResponse response) throws IOException{
         if (request.getMethod().equals("GET"))
-            return Optional.of("/main/register.jsp");
+            return Optional.of("/security/register.jsp");
 
         String email = request.getParameter("email");
         Optional<User> userOpt = clientService.findByEmail(email);

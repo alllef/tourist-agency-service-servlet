@@ -18,7 +18,7 @@ public class HtmlCommand implements ServletCommand {
     }
 
     @Override
-    public Optional<String> execute(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+    public Optional<String> execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
         return Optional.empty();
     }

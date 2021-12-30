@@ -42,18 +42,26 @@ public class AdminService extends ManagerService {
     }
 
     public void updateTour(Tour tour) {
-        tourDAO.findById(tour.getTourId())
-                .orElseThrow();
+        try {
+            tourDAO.findById(tour.getTourId())
+                    .orElseThrow();
 
-        new TourValidation(tour).validate();
-        tourDAO.update(tour);
+            new TourValidation(tour).validate();
+            tourDAO.update(tour);
+        } catch (SQLException e) {
+            throw new BackEndException(e.getMessage());
+        }
     }
 
     public void deleteTour(long tourId) {
-        tourDAO.findById(tourId)
-                .orElseThrow();
+        try {
+            tourDAO.findById(tourId)
+                    .orElseThrow();
 
-        tourDAO.delete(tourId);
+            tourDAO.delete(tourId);
+        } catch (SQLException e) {
+            throw new BackEndException(e.getMessage());
+        }
     }
 
     public void setUserBlocked(long userId) throws SQLException {
@@ -67,6 +75,10 @@ public class AdminService extends ManagerService {
     }
 
     public List<User> getClients() {
-        return userDAO.findUsersByType(UserType.CLIENT);
+        try {
+            return userDAO.findUsersByType(UserType.CLIENT);
+        } catch (SQLException e) {
+            throw new BackEndException(e.getMessage());
+        }
     }
 }

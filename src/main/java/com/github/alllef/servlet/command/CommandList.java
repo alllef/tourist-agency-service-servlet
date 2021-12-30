@@ -25,8 +25,9 @@ public enum CommandList {
             case "/register" -> REGISTRATION;
             case "/managing/tours" -> MANAGER_TOUR_CATALOGUE;
             case "/managing/tour-requests" -> MANAGER_TOUR_REQUEST_COMMAND;
-            case "/my-account" -> CLIENT_TOUR_REQUEST_LIST;
-            case "/tours/catalogue" ->CLIENT_TOUR_CATALOGUE;
+            case "/main/my-account.jsp" -> CLIENT_TOUR_REQUEST_LIST;
+            case "/tours/catalogue" -> CLIENT_TOUR_CATALOGUE;
+            default -> null;
         };
     }
 }

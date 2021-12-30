@@ -25,7 +25,7 @@ public class ManagerTourRequestCommand extends HtmlCommand {
     }
 
     @Override
-    public Optional<String> execute(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+    public Optional<String> execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         super.execute(request, response);
         PrintWriter out = response.getWriter();
         if (request.getMethod().equals("POST"))
@@ -37,7 +37,7 @@ public class ManagerTourRequestCommand extends HtmlCommand {
         return Optional.empty();
     }
 
-    public void updateTourRequest(HttpServletRequest req) throws SQLException {
+    public void updateTourRequest(HttpServletRequest req)  {
         long tourRequestId = Long.parseLong(req.getParameter("update-tour-request"));
         RequestStatus requestStatus = RequestStatus.valueOf(req.getParameter("status"));
         int discount = Integer.parseInt(req.getParameter("discount"));
