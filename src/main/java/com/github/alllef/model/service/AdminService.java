@@ -6,7 +6,10 @@ import com.github.alllef.model.dao.TourRequestDAO;
 import com.github.alllef.model.dao.UserDAO;
 import com.github.alllef.model.entity.Tour;
 import com.github.alllef.model.entity.User;
+import com.github.alllef.model.exception.BackEndException;
 import com.github.alllef.utils.enums.UserType;
+import com.github.alllef.utils.validation.TourRequestValidation;
+import com.github.alllef.utils.validation.TourValidation;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -17,7 +20,7 @@ public class AdminService extends ManagerService {
     public static AdminService getInstance() {
         if (adminService == null) {
             DaoFactory daoFactory = DaoFactory.getInstance();
-            adminService = new AdminService(daoFactory.getTourDAO(),daoFactory.getTourRequestDAO(),daoFactory.getUserDAO());
+            adminService = new AdminService(daoFactory.getTourDAO(), daoFactory.getTourRequestDAO(), daoFactory.getUserDAO());
         }
         return adminService;
     }
@@ -30,19 +33,33 @@ public class AdminService extends ManagerService {
     }
 
     public void createTour(Tour tour) {
-        tourDAO.create(tour);
+        new TourValidation(tour).validate();
+        try {
+            tourDAO.create(tour);
+        } catch (SQLException e) {
+            throw new BackEndException(e.getMessage());
+        }
     }
 
     public void updateTour(Tour tour) {
+        tourDAO.findById(tour.getTourId())
+                .orElseThrow();
+
+        new TourValidation(tour).validate();
         tourDAO.update(tour);
     }
 
     public void deleteTour(long tourId) {
+        tourDAO.findById(tourId)
+                .orElseThrow();
+
         tourDAO.delete(tourId);
     }
 
     public void setUserBlocked(long userId) throws SQLException {
-        User user = userDAO.findById(userId).orElseThrow();
+        User user = userDAO.findById(userId)
+                .orElseThrow();
+
         User updated = user.toBuilder()
                 .isBlocked(!user.isBlocked())
                 .build();

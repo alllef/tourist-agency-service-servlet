@@ -7,6 +7,8 @@ import com.github.alllef.model.entity.Tour;
 import com.github.alllef.model.entity.TourRequest;
 import com.github.alllef.utils.enums.RequestStatus;
 import com.github.alllef.utils.enums.TourType;
+import com.github.alllef.utils.validation.TourRequestValidation;
+import com.github.alllef.utils.validation.TourValidation;
 import lombok.AllArgsConstructor;
 
 import java.sql.SQLException;
@@ -33,6 +35,8 @@ public class ManagerService {
                 .maxDiscount(maxDiscount)
                 .isBurning(isBurning)
                 .build();
+
+        new TourValidation(updated).validate();
         tourDAO.update(updated);
     }
 
@@ -42,6 +46,8 @@ public class ManagerService {
 
     public void updateTourRequest(long tourRequestId, int discount, RequestStatus requestStatus) throws SQLException {
         TourRequest tourRequest = tourRequestDAO.findById(tourRequestId).orElseThrow();
+        Tour tourWithRequest = tourDAO.findById(tourRequestId).orElseThrow();
+        new TourRequestValidation(tourRequest, tourWithRequest.getMaxDiscount()).validate();
 
         TourRequest tourRequestUpdated = tourRequest.toBuilder()
                 .discount(discount)

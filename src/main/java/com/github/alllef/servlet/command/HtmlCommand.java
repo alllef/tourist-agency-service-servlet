@@ -6,19 +6,21 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Optional;
 
 @Getter
 public class HtmlCommand implements ServletCommand {
     private String template;
 
-    HtmlCommand(HtmlTemplate htmlTemplate) {
+   protected HtmlCommand(HtmlTemplate htmlTemplate) {
         this.template = htmlTemplate.getTemplate();
     }
 
     @Override
-    public Optional<String> execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public Optional<String> execute(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
         response.setContentType("text/html");
         return Optional.empty();
     }
+
 }

@@ -39,7 +39,7 @@ public class UserDAO extends AbstractDAO<User> {
     }
 
     @Override
-    public void update(User entity) {
+    public void update(User entity) throws SQLException {
         String updatePositionSql = String.format("""
                 UPDATE %s
                  SET user_type=?,
@@ -58,27 +58,21 @@ public class UserDAO extends AbstractDAO<User> {
             pstmt.setBoolean(6, entity.isBlocked());
             pstmt.setLong(7, entity.getUserId());
             pstmt.executeUpdate();
-        } catch (SQLException throwables) {
-            System.out.println("Watafuck");
-            throwables.printStackTrace();
         }
     }
 
-    public User findUserByEmail(String email) {
+    public User findUserByEmail(String email) throws SQLException {
         String findByEmailSQL = "select * from users where email =?";
         try (PreparedStatement pstmt = con.prepareStatement(findByEmailSQL)) {
             pstmt.setString(1, email);
             ResultSet resultSet = pstmt.executeQuery();
             if (resultSet.next())
                 return mapToEntity(resultSet);
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
         return null;
     }
 
-    public List<User> findUsersByType(UserType userType) {
+    public List<User> findUsersByType(UserType userType) throws SQLException {
         List<User> usersList = new ArrayList<>();
 
         String findByEmailSQL = "select * from users where user_type =?";
@@ -87,15 +81,12 @@ public class UserDAO extends AbstractDAO<User> {
             ResultSet resultSet = pstmt.executeQuery();
             while (resultSet.next())
                 usersList.add(mapToEntity(resultSet));
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
         return usersList;
     }
 
     @Override
-    public void create(User entity) {
+    public void create(User entity) throws SQLException {
         String insertSQL = String.format("""
                 insert into %s(user_type,first_name,last_name,email,user_password)
                   values(?,?,?,?,?)""", tableName);
@@ -106,18 +97,15 @@ public class UserDAO extends AbstractDAO<User> {
             pstmt.setString(4, entity.getEmail());
             pstmt.setString(5, entity.getPassword());
             pstmt.executeUpdate();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws SQLException {
         String deleteQuery = String.format("DELETE FROM %s where user_id=?", tableName);
         try (PreparedStatement pstmt = con.prepareStatement(deleteQuery)) {
             pstmt.setLong(1, id);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            pstmt.executeUpdate();
         }
     }
 

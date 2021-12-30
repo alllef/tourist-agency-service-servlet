@@ -7,11 +7,14 @@ import com.github.alllef.model.dao.UserDAO;
 import com.github.alllef.model.entity.Tour;
 import com.github.alllef.model.entity.TourRequest;
 import com.github.alllef.model.entity.User;
+import com.github.alllef.model.exception.BackEndException;
 import com.github.alllef.utils.enums.HotelType;
 import com.github.alllef.utils.enums.RequestStatus;
 import com.github.alllef.utils.enums.TourType;
+import com.github.alllef.utils.validation.UserValidation;
 import lombok.AllArgsConstructor;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -27,7 +30,7 @@ public class ClientService {
     public static ClientService getInstance() {
         if (clientService == null) {
             DaoFactory daoFactory = DaoFactory.getInstance();
-            clientService = new ClientService(daoFactory.getTourDAO(), daoFactory.getTourRequestDAO(),daoFactory.getUserDAO());
+            clientService = new ClientService(daoFactory.getTourDAO(), daoFactory.getTourRequestDAO(), daoFactory.getUserDAO());
         }
         return clientService;
     }
@@ -36,22 +39,38 @@ public class ClientService {
     private final TourRequestDAO tourRequestDAO;
     private final UserDAO userDAO;
 
-    public void createUser(User user) {
-        userDAO.create(user);
+    public void createClient(User client) {
+        new UserValidation(client).validate();
+        try {
+            userDAO.create(client);
+        } catch (SQLException e) {
+            throw new BackEndException(e.getMessage());
+        }
     }
 
     public void orderTour(long tourId, long userId) {
-        TourRequest tourRequest = TourRequest.builder()
-                .tourId(tourId)
-                .userId(userId)
-                .requestStatus(RequestStatus.REGISTERED)
-                .build();
+        try {
+            tourDAO.findById(tourId).orElseThrow();
+            userDAO.findById(userId).orElseThrow();
 
-        tourRequestDAO.create(tourRequest);
+            TourRequest tourRequest = TourRequest.builder()
+                    .tourId(tourId)
+                    .userId(userId)
+                    .requestStatus(RequestStatus.REGISTERED)
+                    .build();
+
+            tourRequestDAO.create(tourRequest);
+        } catch (SQLException e) {
+            throw new BackEndException(e.getMessage());
+        }
     }
 
     public Optional<User> findByEmail(String email) {
-        return Optional.ofNullable(userDAO.findUserByEmail(email));
+        try {
+            return Optional.ofNullable(userDAO.findUserByEmail(email));
+        } catch (SQLException e) {
+            throw new BackEndException(e.getMessage());
+        }
     }
 
     public List<Tour> filterTours(Map<String, String[]> parameters) {
@@ -91,10 +110,19 @@ public class ClientService {
     }
 
     public Map<TourRequest, Tour> getRequestsWithToursByUser(User user) {
-        return tourRequestDAO.findTourRequestsWithToursByUser(user.getUserId());
+        try {
+            userDAO.findById(user.getUserId()).orElseThrow();
+            return tourRequestDAO.findTourRequestsWithToursByUser(user.getUserId());
+        } catch (SQLException e) {
+            throw new BackEndException(e.getMessage());
+        }
     }
 
-    public Map<TourRequest,Tour> getRequestsWithTours(){
-        return tourRequestDAO.findTourRequestsWithTours();
+    public Map<TourRequest, Tour> getRequestsWithTours() {
+        try {
+            return tourRequestDAO.findTourRequestsWithTours();
+        } catch (SQLException e) {
+            throw new BackEndException(e.getMessage());
+        }
     }
 }

@@ -31,11 +31,11 @@ public abstract class AbstractDAO<T> {
     }
 
     public abstract Optional<T> findById(long id) throws SQLException;
-    public abstract void update(T entity);
+    public abstract void update(T entity) throws SQLException;
 
-    public abstract void create(T entity);
+    public abstract void create(T entity) throws SQLException;
 
-    public abstract void delete(Long id);
+    public abstract void delete(Long id) throws SQLException;
 
     protected abstract T mapToEntity(ResultSet resultSet) throws SQLException;
 }

@@ -9,6 +9,8 @@ import com.github.alllef.model.entity.Tour;
 import com.github.alllef.model.entity.User;
 import com.github.alllef.model.service.ClientService;
 import com.github.alllef.servlet.command.ClientTourCatalogueCommand;
+import com.github.alllef.servlet.command.CommandList;
+import com.github.alllef.servlet.command.ServletCommand;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,29 +20,27 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.Map;
+import java.util.Optional;
 
 @WebServlet(urlPatterns = "/tours/catalogue")
 public class TourCatalogueServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        new ClientTourCatalogueCommand().execute(req, resp);
+        ServletCommand command = CommandList.findCommand(req.getServletPath()).getServletCommand();
+        Optional<String> forwardingPage = command.execute(req,resp);
+        if (forwardingPage.isPresent())
+            req.getRequestDispatcher(forwardingPage.get()).forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        new ClientTourCatalogueCommand().execute(req, resp);
-        if (req.getParameter("order") != null) {
-            HttpSession session = req.getSession(false);
-            User user = (User) session.getAttribute("user");
-            long tourId = Long.parseLong(req.getParameter("order"));
-            DaoFactory daoFactory = DaoFactory.getInstance();
-            ClientService client = new ClientService(daoFactory.getTourDAO(), daoFactory.getTourRequestDAO(), daoFactory.getUserDAO());
-            client.orderTour(tourId, user.getUserId());
-        }
-
-        req.getRequestDispatcher("/main/tour-catalogue.jsp").forward(req, resp);
+        ServletCommand command = CommandList.findCommand(req.getServletPath()).getServletCommand();
+        Optional<String> forwardingPage = command.execute(req,resp);
+        if (forwardingPage.isPresent())
+            req.getRequestDispatcher(forwardingPage.get()).forward(req, resp);
     }
 
 }

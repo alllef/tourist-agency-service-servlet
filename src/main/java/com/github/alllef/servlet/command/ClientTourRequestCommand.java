@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.Optional;
 
 public class ClientTourRequestCommand extends HtmlCommand {
@@ -23,7 +24,7 @@ public class ClientTourRequestCommand extends HtmlCommand {
     }
 
     @Override
-    public Optional<String> execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public Optional<String> execute(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
         super.execute(request, response);
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute("user");

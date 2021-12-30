@@ -44,7 +44,7 @@ public class TourRequestDAO extends AbstractDAO<TourRequest> {
     }
 
     @Override
-    public void update(TourRequest entity) {
+    public void update(TourRequest entity) throws SQLException {
         String updatePositionSql = String.format("""
                 UPDATE %s
                  SET user_id=?,
@@ -59,13 +59,11 @@ public class TourRequestDAO extends AbstractDAO<TourRequest> {
             pstmt.setLong(4, entity.getTourId());
             pstmt.setLong(5, entity.getTourRequestId());
             pstmt.executeUpdate();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
     }
 
     @Override
-    public void create(TourRequest entity) {
+    public void create(TourRequest entity) throws SQLException {
         String insertSQL = String.format("""
                 insert into %s(user_id,request_status,discount,tour_id)
                   values(?,?,?,?)""", tableName);
@@ -75,24 +73,20 @@ public class TourRequestDAO extends AbstractDAO<TourRequest> {
             pstmt.setInt(3, 0);
             pstmt.setLong(4, entity.getTourId());
             pstmt.executeUpdate();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws SQLException {
         String deleteQuery = String.format("DELETE FROM %s where tour_request_id=?", tableName);
         try (PreparedStatement pstmt = con.prepareStatement(deleteQuery)) {
             pstmt.setLong(1, id);
             pstmt.executeUpdate();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
     }
 
 
-    public Map<TourRequest, Tour> findTourRequestsWithToursByUser(long userId) {
+    public Map<TourRequest, Tour> findTourRequestsWithToursByUser(long userId) throws SQLException {
         String joinSql = """
                 select * from tour_requests tr
                  join tours t using(tour_id)
@@ -117,13 +111,11 @@ public class TourRequestDAO extends AbstractDAO<TourRequest> {
                     tourMap.put(tourRequest, tour);
                 }
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
         return tourMap;
     }
 
-    public Map<TourRequest, Tour> findTourRequestsWithTours() {
+    public Map<TourRequest, Tour> findTourRequestsWithTours() throws SQLException {
         String joinSql = """
                 select * from tour_requests tr
                  join tours t using(tour_id)""";
@@ -146,8 +138,6 @@ public class TourRequestDAO extends AbstractDAO<TourRequest> {
                     tourMap.put(tourRequest, tour);
                 }
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
         return tourMap;
     }

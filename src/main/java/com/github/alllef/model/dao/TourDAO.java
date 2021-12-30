@@ -38,7 +38,7 @@ public class TourDAO extends AbstractDAO<Tour> {
     }
 
     @Override
-    public void update(Tour entity) {
+    public void update(Tour entity) throws SQLException {
         String updatePositionSql = String.format("""
                 UPDATE %s
                  SET max_discount=?,
@@ -58,13 +58,11 @@ public class TourDAO extends AbstractDAO<Tour> {
             pstmt.setBoolean(6, entity.isBurning());
             pstmt.setLong(7, entity.getTourId());
             pstmt.executeUpdate();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
     }
 
     @Override
-    public void create(Tour entity) {
+    public void create(Tour entity) throws SQLException {
         String insertSQL = String.format("""
                 insert into %s(max_discount,tour_type,hotel_type,price,is_burning)
                   values(?,?,?,?,?)""", tableName);
@@ -77,20 +75,16 @@ public class TourDAO extends AbstractDAO<Tour> {
             pstmt.setBoolean(5, entity.isBurning());
             ;
             pstmt.executeUpdate();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
 
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws SQLException {
         String deleteQuery = String.format("DELETE FROM %s where tour_id=?", tableName);
         try (PreparedStatement pstmt = con.prepareStatement(deleteQuery)) {
             pstmt.setLong(1, id);
             pstmt.executeUpdate();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
     }
 
